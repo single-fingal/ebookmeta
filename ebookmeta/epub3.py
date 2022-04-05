@@ -34,7 +34,11 @@ class Epub3:
     def load(self):
         if is_zipfile(self.file):
             z = ZipFile(self.file)
-            container = z.read('META-INF/container.xml')
+            try:
+                container = z.read('META-INF/container.xml')
+            except KeyError:
+                # No META-INF/container.xml in the archive
+                raise BadFormat('invalid epub format: Unable to detect META-INF/container.xml')
             tree = etree.fromstring(container)
             self.opf_file = tree.xpath('n:rootfiles/n:rootfile/@full-path', namespaces=self.ns)[0]
             opf_data = z.read(self.opf_file)
