@@ -42,7 +42,11 @@ class Epub2:
             if self.content_root:
                 self.content_root += '/'
             self.tree = etree.fromstring(opf_data)
-            v = self.tree.xpath('/opf:package/@version', namespaces=self.ns)[0]
+            v = self.tree.xpath('/opf:package/@version', namespaces=self.ns)
+            if not v:
+                # TODO Do this differently?
+                raise BadFormat('unknown epub version')
+            v = v[0]
             self.version = v[:1]
             if self.version != '2':
                 raise BadFormat('wrong epub version')
