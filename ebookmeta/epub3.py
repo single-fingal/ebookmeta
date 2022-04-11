@@ -49,8 +49,7 @@ class Epub3:
             try:
                 self.tree = etree.fromstring(opf_data)
             except etree.XMLSyntaxError as err:
-                raise BadFormat('invalid epub format: %s while parse OPF XML: %s'
-                                 % (type(err).__name__, err))
+                raise BadFormat('invalid epub format: Unable to parse OPF XML' ) from err
             v = self.tree.xpath('/opf:package/@version', namespaces=self.ns)
             if not v:
                 # TODO Do this differently?
